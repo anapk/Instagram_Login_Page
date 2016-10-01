@@ -1,8 +1,8 @@
 package com.example.cody.insagram_clone;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,45 +10,35 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.avos.avoscloud.AVException;
-import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVUser;
-import com.avos.avoscloud.LogInCallback;
+import com.avos.avoscloud.SignUpCallback;
 import com.example.cody.insagram_clone.Utility.GradientBackgroundPainter;
 
-
-public class MainActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
     GradientBackgroundPainter bgPainter;
-    EditText userNameField;
-    EditText passwordField;
-    Button changeToSignUpMode;
-    Button loginBtn;
-
-    public void changeToSignUpMode(View view) {
-        Log.i("tag", "hello");
-        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-    }
-
+    private EditText userNameFieldSu;
+    private EditText passwordFieldSu;
+    private Button signUpBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        AVOSCloud.initialize(this, "3vPgWb164xS8KWWXurhWrqhQ-gzGzoHsz", "tVdPDtGB8ToHgK6luKANLgzO");
+        setContentView(R.layout.activity_sign_up);
         setBgColor();
-        userNameField = (EditText) findViewById(R.id.login_user);
-        passwordField = (EditText) findViewById(R.id.login_pass);
-        changeToSignUpMode = (Button) findViewById(R.id.btn_changetosignupmode);
-        loginBtn = (Button) findViewById(R.id.btn_login);
-
-
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        userNameFieldSu = (EditText) findViewById(R.id.signup_user);
+        passwordFieldSu = (EditText) findViewById(R.id.signup_pass);
+        signUpBtn = (Button) findViewById(R.id.btn_signup);
+        signUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AVUser.logInInBackground(String.valueOf(userNameField.getText()), String.valueOf(passwordField.getText()), new LogInCallback<AVUser>() {
+                AVUser user = new AVUser();
+                user.setUsername(String.valueOf(userNameFieldSu.getText()));
+                user.setPassword(String.valueOf(passwordFieldSu.getText()));
+                user.signUpInBackground(new SignUpCallback() {
                     @Override
-                    public void done(AVUser avUser, AVException e) {
-                        if (avUser != null) {
-                            Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    public void done(AVException e) {
+                        if (e == null) {
+                            Log.i("Login Info", "SignUp Successful");
                         } else {
                             String[] error = e.getMessage().split(":");
                             Toast.makeText(getApplicationContext(), error[2].replace("}", "").replace("\"", ""), Toast.LENGTH_SHORT).show();
@@ -56,14 +46,19 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
             }
         });
     }
 
+    public void changeToLoginMode(View view) {
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+    }
+
 
     private void setBgColor() {
-        View bgBottom = findViewById(R.id.btn_changetosignupmode);
-        View bgImage = findViewById(R.id.root_view);
+        View bgBottom = findViewById(R.id.btn_changetologinmode);
+        View bgImage = findViewById(R.id.signup_view);
         final int[] drawables = new int[4];
         drawables[0] = R.drawable.gradient_1;
         drawables[1] = R.drawable.gradient_2;
@@ -74,13 +69,6 @@ public class MainActivity extends AppCompatActivity {
         bgPainter.start();
         bgPainter = new GradientBackgroundPainter(bgBottom, drawables);
         bgPainter.start();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        bgPainter.stop();
-
     }
 
 
