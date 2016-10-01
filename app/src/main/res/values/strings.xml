@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Insagram_clone</string>
+    <string name="leancloud_app_id">3vPgWb164xS8KWWXurhWrqhQ-gzGzoHsz</string>
+    <string name="leancloud_client_key">tVdPDtGB8ToHgK6luKANLgzO</string>
+</resources>
