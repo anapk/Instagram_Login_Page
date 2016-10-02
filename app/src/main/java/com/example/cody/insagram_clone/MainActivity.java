@@ -3,8 +3,9 @@ package com.example.cody.insagram_clone;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,50 +17,79 @@ import com.avos.avoscloud.LogInCallback;
 import com.example.cody.insagram_clone.Utility.GradientBackgroundPainter;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
     GradientBackgroundPainter bgPainter;
     EditText userNameField;
     EditText passwordField;
-    Button changeToSignUpMode;
     Button loginBtn;
-
-    public void changeToSignUpMode(View view) {
-        Log.i("tag", "hello");
-        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        AVOSCloud.initialize(this, "3vPgWb164xS8KWWXurhWrqhQ-gzGzoHsz", "tVdPDtGB8ToHgK6luKANLgzO");
+        initialize();
+
+    }
+
+    private void initialize() {
+        AVOSCloud.initialize(this,
+                "3vPgWb164xS8KWWXurhWrqhQ-gzGzoHsz",
+                "tVdPDtGB8ToHgK6luKANLgzO");
         setBgColor();
         userNameField = (EditText) findViewById(R.id.login_user);
         passwordField = (EditText) findViewById(R.id.login_pass);
-        changeToSignUpMode = (Button) findViewById(R.id.btn_changetosignupmode);
         loginBtn = (Button) findViewById(R.id.btn_login);
+        userNameField.setOnKeyListener(this);
+        passwordField.setOnKeyListener(this);
 
 
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+
+    }
+
+
+    public void login(View view) {
+        String username = String.valueOf(userNameField.getText());
+        String password = String.valueOf(passwordField.getText());
+
+        if (username.isEmpty()) {
+            Toast.makeText(MainActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (password.isEmpty()) {
+            Toast.makeText(MainActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AVUser.logInInBackground(username, password, new LogInCallback<AVUser>() {
             @Override
-            public void onClick(View v) {
-                AVUser.logInInBackground(String.valueOf(userNameField.getText()), String.valueOf(passwordField.getText()), new LogInCallback<AVUser>() {
-                    @Override
-                    public void done(AVUser avUser, AVException e) {
-                        if (avUser != null) {
-                            Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String[] error = e.getMessage().split(":");
-                            Toast.makeText(getApplicationContext(), error[2].replace("}", "").replace("\"", ""), Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
+            public void done(AVUser avUser, AVException e) {
+                if (avUser != null) {
+                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                } else {
+                    String[] error = e.getMessage().split(":");
+                    Toast.makeText(getApplicationContext(), error[2].replace("}", "").replace("\"", ""), Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
             }
+
         });
     }
 
+
+
+
+
+
+    public void dismissKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
+
+
+    public void changeToSignUpMode(View view) {
+        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+    }
 
     private void setBgColor() {
         View bgBottom = findViewById(R.id.btn_changetosignupmode);
@@ -84,4 +114,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            login(v);
+            Toast.makeText(MainActivity.this, "尝试登录", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
 }

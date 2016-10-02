@@ -5,6 +5,7 @@
     android:id="@+id/root_view"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:onClick="dismissKeyboard"
     android:orientation="vertical"
     tools:context="com.example.cody.insagram_clone.MainActivity">
 
@@ -19,11 +20,12 @@
         >
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_logo"
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_marginBottom="10dp"
-            android:src="@drawable/instalogo"/>
+            android:src="@drawable/instalogo"
+            />
 
 
         <EditText
@@ -61,6 +63,7 @@
             android:layout_height="45dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/bg_login_square"
+            android:onClick="login"
             android:text="登录"
             android:textColor="#90bdbdbd"
             android:textSize="16dp"
