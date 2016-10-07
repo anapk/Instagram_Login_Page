@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -14,7 +16,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SignUpCallback;
 import com.example.cody.insagram_clone.Utility.GradientBackgroundPainter;
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity implements View.OnKeyListener{
     GradientBackgroundPainter bgPainter;
     private EditText userNameFieldSu;
     private EditText passwordFieldSu;
@@ -57,6 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void done(AVException e) {
                         if (e == null) {
+                            Toast.makeText(SignUpActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                             Log.i("Login Info", "SignUp Successful");
                         } else {
                             String[] error = e.getMessage().split(":");
@@ -74,6 +77,18 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
 
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
+            signUp();
+        }
+        return false;
+    }
+
+    public void dismissKeyboardSu(View view) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+    }
     private void setBgColor() {
         View bgBottom = findViewById(R.id.btn_changetologinmode);
         View bgImage = findViewById(R.id.signup_view);

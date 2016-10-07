@@ -24,11 +24,18 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     Button loginBtn;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
+        //若用户已登录，直接进入userlist
+        if (AVUser.getCurrentUser() != null) {
+            showUserList();
+        }
+
+
 
     }
 
@@ -42,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         loginBtn = (Button) findViewById(R.id.btn_login);
         userNameField.setOnKeyListener(this);
         passwordField.setOnKeyListener(this);
-
 
 
     }
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             public void done(AVUser avUser, AVException e) {
                 if (avUser != null) {
                     Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    showUserList();
                 } else {
                     String[] error = e.getMessage().split(":");
                     Toast.makeText(getApplicationContext(), error[2].replace("}", "").replace("\"", ""), Toast.LENGTH_SHORT).show();
@@ -76,10 +83,9 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         });
     }
 
-
-
-
-
+    private void showUserList() {
+        startActivity(new Intent(getApplicationContext(), UserList.class));
+    }
 
     public void dismissKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -113,12 +119,10 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
     }
 
-
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
             login(v);
-            Toast.makeText(MainActivity.this, "尝试登录", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
