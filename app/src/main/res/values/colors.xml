@@ -11,4 +11,10 @@
     <color name="color6">#607D8B</color>
     <color name="color7">#FF5722</color>
     <color name="color8">#FFA000</color>
+
+
+        <color name="style_color_primary">#2d5d82</color>
+        <color name="style_color_primary_dark">#21425d</color>
+        <color name="style_color_accent">#01bcd5</color>
+
 </resources>

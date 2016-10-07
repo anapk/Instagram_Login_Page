@@ -1,8 +1,8 @@
 package com.example.cody.insagram_clone;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,7 +16,7 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SignUpCallback;
 import com.example.cody.insagram_clone.Utility.GradientBackgroundPainter;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnKeyListener{
+public class SignUpActivity extends Activity implements View.OnKeyListener{
     GradientBackgroundPainter bgPainter;
     private EditText userNameFieldSu;
     private EditText passwordFieldSu;
@@ -74,7 +74,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnKeyListe
     }
 
     public void changeToLoginMode(View view) {
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
 
     @Override

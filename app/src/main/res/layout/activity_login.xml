@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:onClick="dismissKeyboard"
     android:orientation="vertical"
-    tools:context="com.example.cody.insagram_clone.MainActivity">
+    tools:context="com.example.cody.insagram_clone.LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

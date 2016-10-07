@@ -1,8 +1,8 @@
 package com.example.cody.insagram_clone;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +17,7 @@ import com.avos.avoscloud.LogInCallback;
 import com.example.cody.insagram_clone.Utility.GradientBackgroundPainter;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnKeyListener {
+public class LoginActivity extends Activity implements View.OnKeyListener {
     GradientBackgroundPainter bgPainter;
     EditText userNameField;
     EditText passwordField;
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         initialize();
         //若用户已登录，直接进入userlist
         if (AVUser.getCurrentUser() != null) {
@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
         String password = String.valueOf(passwordField.getText());
 
         if (username.isEmpty()) {
-            Toast.makeText(MainActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
         if (password.isEmpty()) {
-            Toast.makeText(MainActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, "密码不能为空", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
             @Override
             public void done(AVUser avUser, AVException e) {
                 if (avUser != null) {
-                    Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                     showUserList();
                 } else {
                     String[] error = e.getMessage().split(":");
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnKeyListene
 
 
     public void changeToSignUpMode(View view) {
-        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+        startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
     }
 
     private void setBgColor() {

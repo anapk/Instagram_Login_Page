@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:onClick="dismissKeyboardSu"
-    tools:context="com.example.cody.insagram_clone.MainActivity">
+    tools:context="com.example.cody.insagram_clone.LoginActivity">
 
 
     <View
